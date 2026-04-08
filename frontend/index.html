@@ -976,7 +976,7 @@ DOM.analyzeBtn.addEventListener('click', async () => {
   formData.append('job_desc', DOM.jobDescription.value);
   
   try {
-    const res = await fetch("https://ai-resume-analyzer-and-company-dec8.onrender.com/analyze", { method: 'POST', body: formData });
+    const res = await fetch("https://ai-resume-analyzer-and-company-nv3h.onrender.com/analyze", { method: 'POST', body: formData });
     const data = await res.json();
     
     DOM.loading.style.display = 'none';
@@ -1185,7 +1185,7 @@ async function sendMessage() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
   try {
-    const res = await fetch('https://ai-resume-analyzer-and-company-dec8.onrender.com/chat', {
+    const res = await fetch('https://ai-resume-analyzer-and-company-nv3h.onrender.com/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
