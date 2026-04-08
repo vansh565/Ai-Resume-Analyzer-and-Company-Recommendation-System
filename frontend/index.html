@@ -1,205 +1,1214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Resume Checker - Analyze & Chat</title>
-  <meta name="description" content="AI-powered resume analyzer + expert chatbot for ATS optimization and career advice" />
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>AI Resume Analyzer | Smart ATS Scanner & Career Coach</title>
+  <meta name="description" content="AI-powered resume analyzer with ATS scoring, company recommendations, and intelligent career coaching" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ============================================
+       ROOT VARIABLES & THEME CONFIGURATION
+       ============================================ */
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #111118;
+      --bg-tertiary: #1a1a24;
+      --bg-hover: #22222e;
+      --bg-card: #13131c;
+      
+      /* Accent Colors */
+      --accent-primary: #00d9ff;
+      --accent-secondary: #0ea5e9;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --accent-purple: #8b5cf6;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b8;
+      --text-tertiary: #6b6b8c;
+      
+      /* Borders & Shadows */
+      --border: #2a2a36;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 20px rgba(0, 217, 255, 0.2);
+      
+      /* Spacing */
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+      
+      /* Border Radius */
+      --radius-sm: 0.5rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+      
+      /* Transitions */
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-primary);
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-secondary);
+    }
+    
+    /* Container */
+    .app-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: var(--space-lg) var(--space-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(17, 17, 24, 0.95);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .logo i {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .app-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    
+    .app-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+      width: 100%;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      transition: var(--transition);
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-primary);
+    }
+    
+    /* Section Titles */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .section-title i {
+      font-size: 1.8rem;
+      color: var(--accent-primary);
+    }
+    
+    /* Upload Area */
+    .upload-area {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      background: var(--bg-tertiary);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+    
+    .upload-label:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-hover);
+      transform: scale(1.02);
+    }
+    
+    .upload-label i {
+      font-size: 3rem;
+      color: var(--accent-primary);
+      margin-bottom: var(--space-md);
+    }
+    
+    .upload-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .upload-hint {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+    }
+    
+    .file-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md);
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent-success);
+      border-radius: var(--radius-lg);
+      margin-top: var(--space-md);
+    }
+    
+    .file-name {
+      font-weight: 500;
+      color: var(--accent-success);
+    }
+    
+    .remove-file-btn {
+      background: var(--accent-danger);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .remove-file-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    /* Textarea */
+    .job-description-input {
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      color: var(--text-primary);
+      font-family: 'Inter', monospace;
+      font-size: 0.95rem;
+      resize: vertical;
+      transition: var(--transition);
+    }
+    
+    .job-description-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+    }
+    
+    .input-stats {
+      margin-top: var(--space-sm);
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+    }
+    
+    /* Buttons */
+    .action-section {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      margin-top: var(--space-xl);
+    }
+    
+    .btn {
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-hover);
+    }
+    
+    /* Loading */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: var(--space-md);
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Score Display */
+    .score-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    
+    .score-circle {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+    
+    .score-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    
+    .score-bg {
+      fill: none;
+      stroke: var(--bg-tertiary);
+      stroke-width: 12;
+    }
+    
+    .score-progress {
+      fill: none;
+      stroke: var(--accent-primary);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 565.48;
+      stroke-dashoffset: 565.48;
+      transition: stroke-dashoffset 1.5s ease-out;
+    }
+    
+    .score-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .score-number {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .score-percent {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .score-message {
+      font-size: 1.1rem;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    
+    .score-message.excellent {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-success);
+      border: 1px solid var(--accent-success);
+    }
+    
+    .score-message.good {
+      background: rgba(0, 217, 255, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+    }
+    
+    .score-message.poor {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-danger);
+      border: 1px solid var(--accent-danger);
+    }
+    
+    /* Skills Container */
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: var(--space-md);
+    }
+    
+    .skill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(14, 165, 233, 0.1));
+      border: 1px solid var(--accent-primary);
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    /* Company Cards */
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .company-card-detailed {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+    
+    .company-card-detailed:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+      border-color: var(--accent-primary);
+    }
+    
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .company-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .company-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(245, 158, 11, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+    
+    .rating-stars {
+      color: #f59e0b;
+    }
+    
+    .company-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .detail-icon {
+      min-width: 24px;
+      color: var(--accent-primary);
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 80px;
+    }
+    
+    .roles-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      flex: 1;
+    }
+    
+    .role-tag {
+      background: rgba(0, 217, 255, 0.1);
+      color: var(--accent-primary);
+      padding: 0.25rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+    }
+    
+    .company-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .btn-apply {
+      flex: 2;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .btn-apply:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 217, 255, 0.4);
+    }
+    
+    .btn-save {
+      flex: 1;
+      padding: 0.75rem;
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .btn-save:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+    
+    /* Chat Section */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: var(--space-md);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .message {
+      max-width: 80%;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-lg);
+      line-height: 1.5;
+    }
+    
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+    }
+    
+    .message.bot {
+      align-self: flex-start;
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .chat-input-area {
+      display: flex;
+      padding: var(--space-sm);
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      gap: var(--space-sm);
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 0.75rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      resize: none;
+      font-family: inherit;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+    
+    /* Toggle Buttons */
+    .toggle-section {
+      margin-top: var(--space-lg);
+    }
+    
+    .toggle-btn {
+      margin-bottom: var(--space-sm);
+    }
+    
+    pre {
+      background: var(--bg-tertiary);
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+      color: var(--text-secondary);
+      max-height: 400px;
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: var(--space-lg);
+      text-align: center;
+      margin-top: var(--space-xl);
+    }
+    
+    .footer-text {
+      color: var(--text-tertiary);
+      font-size: 0.85rem;
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent-success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: var(--space-md);
+      }
+      
+      .card {
+        padding: var(--space-lg);
+      }
+      
+      .companies-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-section {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .message {
+        max-width: 90%;
+      }
+      
+      .section-title {
+        font-size: 1.2rem;
+      }
+    }
+    
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+    
+    .mt-2 { margin-top: var(--space-md); }
+    .mb-2 { margin-bottom: var(--space-md); }
+  </style>
 </head>
 <body>
 <div class="app-container">
-
+  
   <header class="header">
     <div class="header-content">
-      <h1 class="app-title">AI Resume Checker</h1>
+      <div class="logo">
+        <i class="fas fa-robot"></i>
+        <h1 class="app-title">AI Resume Analyzer</h1>
+      </div>
       <p class="app-subtitle">
-        Analyze your resume + get expert advice from AI career coach
+        Smart ATS Scanner + Career Coach | Get instant feedback and company recommendations
       </p>
     </div>
   </header>
-
+  
   <main class="main-content">
-
+    
     <!-- Analysis Card -->
-    <div class="card analysis-card">
-      <section class="section upload-section">
-        <h2 class="section-title">
-          <span class="section-icon"></span>
-          Upload Your Resume
-        </h2>
-
-        <div class="upload-area">
-          <input type="file" id="resumeInput" accept=".pdf" hidden />
-          <label for="resumeInput" class="upload-label">
-            <div class="upload-icon">📄</div>
-            <p class="upload-text">Click to upload or drag and drop</p>
-            <p class="upload-hint">PDF files only (Max 5MB)</p>
-          </label>
-
-          <div class="file-info" id="fileInfo" style="display:none;">
-            <span class="file-name" id="fileName"></span>
-            <button class="remove-file-btn" id="removeFile">✕</button>
-          </div>
+    <div class="card">
+      <div class="section-title">
+        <i class="fas fa-file-alt"></i>
+        <h2>Resume Analysis</h2>
+      </div>
+      
+      <div class="upload-area">
+        <input type="file" id="resumeInput" accept=".pdf" hidden />
+        <label for="resumeInput" class="upload-label">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p class="upload-text">Click to upload your resume</p>
+          <p class="upload-hint">PDF format only (Max 5MB)</p>
+        </label>
+        <div class="file-info" id="fileInfo" style="display:none;">
+          <i class="fas fa-file-pdf"></i>
+          <span class="file-name" id="fileName"></span>
+          <button class="remove-file-btn" id="removeFile">✕</button>
         </div>
-      </section>
-
-      <section class="section job-description-section">
-        <h2 class="section-title">
-          <span class="section-icon"></span>
-          Job Description
-        </h2>
-
-        <textarea
-          id="jobDescription"
-          class="job-description-input"
-          placeholder="Paste the complete job description here..."
-          rows="10"></textarea>
-
-        <div class="input-stats">
-          <span id="charCount">0 characters</span>
-        </div>
-      </section>
-
+      </div>
+      
+      <textarea
+        id="jobDescription"
+        class="job-description-input"
+        placeholder="Paste the complete job description here..."
+        rows="8"></textarea>
+      <div class="input-stats">
+        <span id="charCount">0 characters</span>
+      </div>
+      
       <div class="action-section">
         <button class="btn btn-primary" id="analyzeBtn">
-          <span class="btn-text">Analyze Resume</span>
-          <span class="btn-icon">→</span>
+          <i class="fas fa-chart-line"></i>
+          Analyze Resume
         </button>
-
         <button class="btn btn-secondary" id="resetBtn">
+          <i class="fas fa-redo-alt"></i>
           Reset
         </button>
       </div>
     </div>
-
-    <!-- Loading Overlay -->
+    
+    <!-- Loading -->
     <div class="loading-container" id="loadingContainer" style="display:none;">
       <div class="loading-spinner"></div>
-      <p class="loading-text">Analyzing your resume...</p>
-      <p class="loading-subtext">This may take a few seconds</p>
+      <p class="upload-text">Analyzing your resume...</p>
+      <p class="upload-hint">This may take 10-15 seconds</p>
     </div>
-
+    
     <!-- Results Card -->
-    <div class="card results-card" id="resultsCard" style="display:none;">
-      <section class="section score-section">
-        <h2 class="section-title">
-          <span class="section-icon">🎯</span>
-          ATS Match Score
-        </h2>
-
-        <div class="score-display">
-          <div class="score-circle">
-            <svg class="score-svg" viewBox="0 0 200 200">
-              <circle class="score-bg" cx="100" cy="100" r="90"></circle>
-              <circle class="score-progress" id="scoreProgress"
-                      cx="100" cy="100" r="90"></circle>
-            </svg>
-
-            <div class="score-value">
-              <span class="score-number" id="scoreNumber">0</span>
-              <span class="score-percent">%</span>
-            </div>
+    <div class="card" id="resultsCard" style="display:none;">
+      <div class="section-title">
+        <i class="fas fa-chart-pie"></i>
+        <h2>Analysis Results</h2>
+      </div>
+      
+      <!-- Score Section -->
+      <div class="score-display">
+        <div class="score-circle">
+          <svg class="score-svg" viewBox="0 0 200 200">
+            <circle class="score-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="score-progress" id="scoreProgress" cx="100" cy="100" r="90"></circle>
+          </svg>
+          <div class="score-value">
+            <span class="score-number" id="scoreNumber">0</span>
+            <span class="score-percent">%</span>
           </div>
-
-          <p class="score-message" id="scoreMessage"></p>
         </div>
-      </section>
-
-      <section class="section suggestions-section">
-        <h2 class="section-title">
-          <span class="section-icon">💡</span>
-          Gemini Feedback
-        </h2>
-        <div class="suggestions-container" id="suggestions"></div>
-      </section>
-
-      <section class="section skills-section">
-        <h2 class="section-title">
-          <span class="section-icon">⚡</span>
-          Extracted Skills
-        </h2>
-        <div class="skills-container" id="skillsContainer"></div>
-      </section>
-
-      <section class="section companies-section">
-        <h2 class="section-title">
-          <span class="section-icon">🏢</span>
-          Recommended Companies
-        </h2>
-        <div id="companyRecommendations"></div>
-      </section>
-
-      <section class="section">
-        <h2 class="section-title">Parse Tree</h2>
-        <button class="btn btn-secondary" id="toggleParseBtn">
+        <p class="score-message" id="scoreMessage"></p>
+      </div>
+      
+      <!-- Gemini Feedback -->
+      <div class="section-title mt-2">
+        <i class="fas fa-comment-dots"></i>
+        <h3>AI Feedback</h3>
+      </div>
+      <div id="suggestions" class="suggestions-container"></div>
+      
+      <!-- Extracted Skills -->
+      <div class="section-title mt-2">
+        <i class="fas fa-code"></i>
+        <h3>Extracted Skills</h3>
+      </div>
+      <div id="skillsContainer" class="skills-container"></div>
+      
+      <!-- Company Recommendations -->
+      <div class="section-title mt-2">
+        <i class="fas fa-building"></i>
+        <h3>Recommended Companies</h3>
+      </div>
+      <div id="companyRecommendations"></div>
+      
+      <!-- Technical Details -->
+      <div class="toggle-section">
+        <div class="section-title mt-2">
+          <i class="fas fa-tree"></i>
+          <h3>Technical Analysis</h3>
+        </div>
+        <button class="btn btn-secondary toggle-btn" id="toggleParseBtn">
+          <i class="fas fa-code-branch"></i>
           Toggle Parse Tree
         </button>
-        <pre id="parseTreeBox" style="margin-top:15px; display:none;"></pre>
-      </section>
-
-      <section class="section">
-        <h2 class="section-title">Intermediate Code</h2>
-        <button class="btn btn-secondary" id="toggleIRBtn">
-          Toggle IR
+        <pre id="parseTreeBox" style="display:none;"></pre>
+        
+        <button class="btn btn-secondary toggle-btn mt-2" id="toggleIRBtn">
+          <i class="fas fa-microchip"></i>
+          Toggle Intermediate Code
         </button>
-        <pre id="irBox" style="margin-top:15px; display:none;"></pre>
-      </section>
-
+        <pre id="irBox" style="display:none;"></pre>
+      </div>
+      
       <div class="action-section">
         <button class="btn btn-primary" id="analyzeAgainBtn">
+          <i class="fas fa-plus-circle"></i>
           Analyze Another Resume
         </button>
       </div>
     </div>
-
-    <!-- Error Overlay -->
-    <div class="error-container" id="errorContainer" style="display:none;">
-      <div class="error-card">
-        <div class="error-icon">⚠️</div>
-        <h3 class="error-title">Oops! Something went wrong</h3>
-        <p class="error-message" id="errorMessage"></p>
-        <button class="btn btn-secondary" id="dismissError">Dismiss</button>
+    
+    <!-- Chatbot Card -->
+    <div class="card">
+      <div class="section-title">
+        <i class="fas fa-robot"></i>
+        <h2>Career Coach AI</h2>
+      </div>
+      
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+          <textarea 
+            id="chatInput" 
+            class="chat-input" 
+            placeholder="Ask anything about resumes, ATS, interviews, career advice..."
+            rows="2"></textarea>
+          <button class="btn btn-primary" id="sendChatBtn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
       </div>
     </div>
-
-    <!-- ────────────────────────────────────────────────
-         CHATBOT SECTION (always visible)
-         ──────────────────────────────────────────────── -->
-    <div class="card chat-card">
-      <section class="section chat-section">
-        <h2 class="section-title">
-          <span class="section-icon">🤖</span>
-          Resume & Career Chat
-        </h2>
-
-        <div class="chat-container" id="chatContainer">
-          <div class="chat-messages" id="chatMessages"></div>
-
-          <div class="chat-input-area">
-            <textarea 
-              id="chatInput" 
-              class="chat-input" 
-              placeholder="Ask anything about resumes, ATS, interviews, career moves..." 
-              rows="2"
-            ></textarea>
-            <button class="btn btn-primary" id="sendChatBtn">Send</button>
-          </div>
-        </div>
-      </section>
-    </div>
-
+    
   </main>
-
+  
   <footer class="footer">
     <p class="footer-text">
-      AI Resume Checker | Powered by Gemini • Compiler Simulation Mode
+      <i class="fas fa-brain"></i> Powered by Gemini AI • ATS Optimized • Smart Career Recommendations
     </p>
   </footer>
-
 </div>
 
-<script src="/script.js"></script>
+<script>
+// DOM Elements
+const DOM = {
+  resumeInput: document.getElementById('resumeInput'),
+  jobDescription: document.getElementById('jobDescription'),
+  charCount: document.getElementById('charCount'),
+  fileInfo: document.getElementById('fileInfo'),
+  fileName: document.getElementById('fileName'),
+  removeFile: document.getElementById('removeFile'),
+  analyzeBtn: document.getElementById('analyzeBtn'),
+  resetBtn: document.getElementById('resetBtn'),
+  loading: document.getElementById('loadingContainer'),
+  results: document.getElementById('resultsCard'),
+  scoreNumber: document.getElementById('scoreNumber'),
+  scoreProgress: document.getElementById('scoreProgress'),
+  scoreMessage: document.getElementById('scoreMessage'),
+  suggestions: document.getElementById('suggestions'),
+  skillsContainer: document.getElementById('skillsContainer'),
+  parseTreeBox: document.getElementById('parseTreeBox'),
+  irBox: document.getElementById('irBox'),
+  toggleParseBtn: document.getElementById('toggleParseBtn'),
+  toggleIRBtn: document.getElementById('toggleIRBtn'),
+  analyzeAgainBtn: document.getElementById('analyzeAgainBtn'),
+  companyRecommendations: document.getElementById('companyRecommendations')
+};
+
+let uploadedFile = null;
+
+// File Upload
+DOM.resumeInput.addEventListener('change', e => {
+  uploadedFile = e.target.files[0];
+  if (uploadedFile) {
+    DOM.fileName.textContent = uploadedFile.name;
+    DOM.fileInfo.style.display = 'flex';
+  }
+});
+
+// Remove File
+DOM.removeFile?.addEventListener('click', () => {
+  uploadedFile = null;
+  DOM.resumeInput.value = '';
+  DOM.fileInfo.style.display = 'none';
+});
+
+// Character Counter
+DOM.jobDescription.addEventListener('input', e => {
+  DOM.charCount.textContent = `${e.target.value.length} characters`;
+});
+
+// Analyze Resume
+DOM.analyzeBtn.addEventListener('click', async () => {
+  if (!uploadedFile || DOM.jobDescription.value.length < 10) {
+    alert('Please upload a resume and enter a job description');
+    return;
+  }
+  
+  DOM.loading.style.display = 'flex';
+  DOM.results.style.display = 'none';
+  
+  const formData = new FormData();
+  formData.append('resume', uploadedFile);
+  formData.append('job_desc', DOM.jobDescription.value);
+  
+  try {
+    fetch("https://ai-resume-analyzer-and-company-dec8.onrender.com/analyze",  { method: 'POST', body: formData });
+    const data = await res.json();
+    
+    DOM.loading.style.display = 'none';
+    
+    if (res.ok) {
+      renderResults(data);
+    } else {
+      alert('Error: ' + (data.error || 'Analysis failed'));
+    }
+  } catch (error) {
+    DOM.loading.style.display = 'none';
+    alert('Server error. Please try again.');
+    console.error(error);
+  }
+});
+
+// Render Results
+function renderResults(data) {
+  DOM.results.style.display = 'block';
+  
+  // Animate score
+  const score = data.ATS_Match_Score || 0;
+  animateScore(score);
+  
+  // Score message
+  if (score >= 75) {
+    DOM.scoreMessage.textContent = '🎉 Excellent! Your resume is well-optimized for ATS';
+    DOM.scoreMessage.className = 'score-message excellent';
+  } else if (score >= 50) {
+    DOM.scoreMessage.textContent = '👍 Good match! Some improvements can boost your score';
+    DOM.scoreMessage.className = 'score-message good';
+  } else {
+    DOM.scoreMessage.textContent = '⚠️ Needs improvement. Follow the suggestions below';
+    DOM.scoreMessage.className = 'score-message poor';
+  }
+  
+  // Feedback
+  DOM.suggestions.innerHTML = `
+    <div class="company-card-detailed">
+      <div class="company-header">
+        <div class="company-name">Gemini AI Analysis</div>
+      </div>
+      <div class="company-details">
+        <div class="detail-item">
+          <div class="detail-icon">💡</div>
+          <div class="detail-label">Feedback:</div>
+          <div>${formatFeedback(data.Gemini_Feedback || 'No feedback available')}</div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Skills
+  if (data.Extracted_Skills && data.Extracted_Skills.length > 0) {
+    DOM.skillsContainer.innerHTML = data.Extracted_Skills.map(skill => 
+      `<div class="skill-tag"><i class="fas fa-check-circle"></i> ${escapeHtml(skill)}</div>`
+    ).join('');
+  } else {
+    DOM.skillsContainer.innerHTML = '<p class="upload-hint">No skills extracted</p>';
+  }
+  
+  // Company Recommendations
+  if (data.Company_Recommendations && Object.keys(data.Company_Recommendations).length > 0) {
+    displayCompanies(data.Company_Recommendations);
+  } else {
+    DOM.companyRecommendations.innerHTML = '<p class="upload-hint">No company recommendations available</p>';
+  }
+  
+  // Technical data
+  DOM.parseTreeBox.textContent = data.Parse_Tree || 'No parse tree generated';
+  DOM.irBox.textContent = data.IR_Code || 'No IR code generated';
+}
+
+function animateScore(score) {
+  const circumference = 2 * Math.PI * 90;
+  const offset = circumference - (score / 100) * circumference;
+  DOM.scoreProgress.style.strokeDashoffset = offset;
+  
+  let current = 0;
+  const interval = setInterval(() => {
+    DOM.scoreNumber.textContent = current;
+    current++;
+    if (current > score) clearInterval(interval);
+  }, 15);
+}
+
+function formatFeedback(text) {
+  return text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+function displayCompanies(recommendations) {
+  DOM.companyRecommendations.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.className = 'companies-grid';
+  
+  for (const [category, companies] of Object.entries(recommendations)) {
+    companies.forEach(company => {
+      const card = document.createElement('div');
+      card.className = 'company-card-detailed';
+      card.innerHTML = `
+        <div class="company-header">
+          <div class="company-name">${escapeHtml(company.name)}</div>
+          <div class="company-rating">
+            <span class="rating-stars">★</span>
+            <span>${company.rating || 'N/A'}</span>
+          </div>
+        </div>
+        <div class="company-details">
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-label">Package:</div>
+            <div>${company.package || 'Competitive'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💼</div>
+            <div class="detail-label">Roles:</div>
+            <div class="roles-list">
+              ${(company.roles || ['Various roles']).map(role => `<span class="role-tag">${role}</span>`).join('')}
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">📍</div>
+            <div class="detail-label">Locations:</div>
+            <div>${company.locations ? company.locations.join(', ') : 'Multiple locations'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">ℹ️</div>
+            <div class="detail-label">About:</div>
+            <div>${company.description || 'Leading company with great opportunities'}</div>
+          </div>
+        </div>
+        <div class="company-actions">
+          <a href="${company.link}" target="_blank" class="btn-apply">View Opportunities →</a>
+          <button class="btn-save" onclick="saveCompany('${escapeHtml(company.name)}')">📌 Save</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+  DOM.companyRecommendations.appendChild(grid);
+}
+
+function saveCompany(name) {
+  let saved = JSON.parse(localStorage.getItem('savedCompanies') || '[]');
+  if (!saved.includes(name)) {
+    saved.push(name);
+    localStorage.setItem('savedCompanies', JSON.stringify(saved));
+    showNotification(`✓ ${name} saved!`);
+  } else {
+    showNotification(`${name} already saved`);
+  }
+}
+
+function showNotification(msg) {
+  const notif = document.createElement('div');
+  notif.className = 'notification';
+  notif.textContent = msg;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.classList.add('show'), 100);
+  setTimeout(() => {
+    notif.classList.remove('show');
+    setTimeout(() => notif.remove(), 300);
+  }, 3000);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Toggle buttons
+DOM.toggleParseBtn?.addEventListener('click', () => {
+  DOM.parseTreeBox.style.display = DOM.parseTreeBox.style.display === 'none' ? 'block' : 'none';
+});
+DOM.toggleIRBtn?.addEventListener('click', () => {
+  DOM.irBox.style.display = DOM.irBox.style.display === 'none' ? 'block' : 'none';
+});
+DOM.analyzeAgainBtn?.addEventListener('click', () => location.reload());
+DOM.resetBtn.addEventListener('click', () => location.reload());
+
+// Chat functionality
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendChatBtn');
+
+function addMessage(text, type = 'bot') {
+  const msg = document.createElement('div');
+  msg.className = `message ${type}`;
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function sendMessage() {
+  const message = chatInput.value.trim();
+  if (!message) return;
+  
+  addMessage(message, 'user');
+  chatInput.value = '';
+  
+  const loading = document.createElement('div');
+  loading.className = 'message bot loading';
+  loading.textContent = 'Thinking...';
+  chatMessages.appendChild(loading);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  try {
+    const res = await fetch('https://ai-resume-analyzer-and-company-dec8.onrender.com/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    loading.remove();
+    addMessage(data.reply || 'No response', 'bot');
+  } catch (err) {
+    loading.remove();
+    addMessage('Sorry, something went wrong. Please try again.', 'bot');
+  }
+}
+
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Welcome message
+addMessage("👋 Hi! I'm your AI career coach. Ask me anything about resumes, ATS optimization, interview tips, or career advice!", 'bot');
+</script>
 </body>
 </html>
