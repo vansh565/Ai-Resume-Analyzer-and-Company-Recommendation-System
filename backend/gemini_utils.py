@@ -1,8 +1,17 @@
 import re
 import google.generativeai as genai
 
+import os
+from dotenv import load_dotenv
 
-genai.configure(api_key="AIzaSyCJx0W2neBS9sh-jUZzZllCy--pTFaMM6M")
+# Load .env file
+load_dotenv()
+
+# Get API key from .env
+api_key = os.getenv("GEMINI_API_KEY")
+
+genai.configure(api_key=api_key)
+
 
 model = genai.GenerativeModel("gemini-3-flash-preview")
 generation_config={"temperature": 0.7, "top_p": 0.95}
