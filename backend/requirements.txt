@@ -4,3 +4,4 @@ PyPDF2
 gunicorn
 scikit-learn
 google-generativeai
+python-dotenv
