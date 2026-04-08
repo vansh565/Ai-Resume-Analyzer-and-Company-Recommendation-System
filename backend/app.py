@@ -21,7 +21,7 @@ FRONTEND_PATH = os.path.join(os.getcwd(), "..", "frontend")
 
 @app.route("/")
 def index():
-    return send_from_directory(FRONTEND_PATH, "2.html")
+    return send_from_directory(FRONTEND_PATH, "index.html")
 
 
 @app.route("/<path:path>")
