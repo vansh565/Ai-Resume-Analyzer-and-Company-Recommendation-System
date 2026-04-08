@@ -976,7 +976,7 @@ DOM.analyzeBtn.addEventListener('click', async () => {
   formData.append('job_desc', DOM.jobDescription.value);
   
   try {
-    fetch("https://ai-resume-analyzer-and-company-dec8.onrender.com/analyze",  { method: 'POST', body: formData });
+    const res = await fetch("https://ai-resume-analyzer-and-company-dec8.onrender.com/analyze", { method: 'POST', body: formData });
     const data = await res.json();
     
     DOM.loading.style.display = 'none';
