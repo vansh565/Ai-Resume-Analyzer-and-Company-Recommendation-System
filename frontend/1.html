@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Resume Checker - Analyze & Chat</title>
+  <meta name="description" content="AI-powered resume analyzer + expert chatbot for ATS optimization and career advice" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+
+  <header class="header">
+    <div class="header-content">
+      <h1 class="app-title">AI Resume Checker</h1>
+      <p class="app-subtitle">
+        Analyze your resume + get expert advice from AI career coach
+      </p>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Analysis Card -->
+    <div class="card analysis-card">
+      <section class="section upload-section">
+        <h2 class="section-title">
+          <span class="section-icon"></span>
+          Upload Your Resume
+        </h2>
+
+        <div class="upload-area">
+          <input type="file" id="resumeInput" accept=".pdf" hidden />
+          <label for="resumeInput" class="upload-label">
+            <div class="upload-icon"></div>
+            <p class="upload-text">Click to upload or drag and drop</p>
+            <p class="upload-hint">PDF files only (Max 5MB)</p>
+          </label>
+
+          <div class="file-info" id="fileInfo" style="display:none;">
+            <span class="file-name" id="fileName"></span>
+            <button class="remove-file-btn" id="removeFile">✕</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section job-description-section">
+        <h2 class="section-title">
+          <span class="section-icon"></span>
+          Job Description
+        </h2>
+
+        <textarea
+          id="jobDescription"
+          class="job-description-input"
+          placeholder="Paste the complete job description here..."
+          rows="10"></textarea>
+
+        <div class="input-stats">
+          <span id="charCount">0 characters</span>
+        </div>
+      </section>
+
+      <div class="action-section">
+        <button class="btn btn-primary" id="analyzeBtn">
+          <span class="btn-text">Analyze Resume</span>
+          <span class="btn-icon"></span>
+        </button>
+
+        <button class="btn btn-secondary" id="resetBtn">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-container" id="loadingContainer" style="display:none;">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Analyzing your resume...</p>
+      <p class="loading-subtext">This may take a few seconds</p>
+    </div>
+
+    <!-- Results Card -->
+    <div class="card results-card" id="resultsCard" style="display:none;">
+      <section class="section score-section">
+        <h2 class="section-title">
+          <span class="section-icon"></span>
+          ATS Match Score
+        </h2>
+
+        <div class="score-display">
+          <div class="score-circle">
+            <svg class="score-svg" viewBox="0 0 200 200">
+              <circle class="score-bg" cx="100" cy="100" r="90"></circle>
+              <circle class="score-progress" id="scoreProgress"
+                      cx="100" cy="100" r="90"></circle>
+            </svg>
+
+            <div class="score-value">
+              <span class="score-number" id="scoreNumber">0</span>
+              <span class="score-percent">%</span>
+            </div>
+          </div>
+
+          <p class="score-message" id="scoreMessage"></p>
+        </div>
+      </section>
+
+      <section class="section suggestions-section">
+        <h2 class="section-title">
+          <span class="section-icon">💡</span>
+          Gemini Feedback
+        </h2>
+        <div class="suggestions-container" id="suggestions"></div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Parse Tree</h2>
+        <button class="btn btn-secondary" id="toggleParseBtn">
+          Toggle Parse Tree
+        </button>
+        <pre id="parseTreeBox" style="margin-top:15px; display:none;"></pre>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Intermediate Code</h2>
+        <button class="btn btn-secondary" id="toggleIRBtn">
+          Toggle IR
+        </button>
+        <pre id="irBox" style="margin-top:15px; display:none;"></pre>
+      </section>
+
+      <div class="action-section">
+        <button class="btn btn-primary" id="analyzeAgainBtn">
+          Analyze Another Resume
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Overlay -->
+    <div class="error-container" id="errorContainer" style="display:none;">
+      <div class="error-card">
+        <div class="error-icon"></div>
+        <h3 class="error-title">Oops! Something went wrong</h3>
+        <p class="error-message" id="errorMessage"></p>
+        <button class="btn btn-secondary" id="dismissError">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- ────────────────────────────────────────────────
+         CHATBOT SECTION (always visible)
+         ──────────────────────────────────────────────── -->
+    <div class="card chat-card">
+      <section class="section chat-section">
+        <h2 class="section-title">
+          <span class="section-icon">🤖</span>
+          Resume & Career Chat
+        </h2>
+
+        <div class="chat-container" id="chatContainer">
+          <div class="chat-messages" id="chatMessages"></div>
+
+          <div class="chat-input-area">
+            <textarea 
+              id="chatInput" 
+              class="chat-input" 
+              placeholder="Ask anything about resumes, ATS, interviews, career moves..." 
+              rows="2"
+            ></textarea>
+            <button class="btn btn-primary" id="sendChatBtn">Send</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p class="footer-text">
+      AI Resume Checker | Powered by Gemini • Compiler Simulation Mode
+    </p>
+  </footer>
+
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>
